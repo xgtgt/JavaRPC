@@ -20,8 +20,8 @@ public class ServiceProvider {
     //本地注册服务
 
     public void provideServiceInterface(Object service){
-        String serviceName=service.getClass().getName();
-        Class<?>[] interfaceName=service.getClass().getInterfaces();
+        String serviceName = service.getClass().getName();
+        Class<?>[] interfaceName = service.getClass().getInterfaces();
 
         for (Class<?> clazz:interfaceName){
             interfaceProvider.put(clazz.getName(),service);

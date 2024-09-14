@@ -14,12 +14,12 @@ import part1.common.service.UserService;
  */
 public class TestServer {
     public static void main(String[] args) {
-        UserService userService=new UserServiceImpl();
+        UserService userService = new UserServiceImpl();
 
-        ServiceProvider serviceProvider=new ServiceProvider();
+        ServiceProvider serviceProvider = new ServiceProvider();
         serviceProvider.provideServiceInterface(userService);
 
-        RpcServer rpcServer=new SimpleRPCRPCServer(serviceProvider);
+        RpcServer rpcServer = new SimpleRPCRPCServer(serviceProvider);
         rpcServer.start(9999);
     }
 }

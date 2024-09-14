@@ -26,8 +26,8 @@ public class WorkThread implements Runnable{
     @Override
     public void run() {
         try {
-            ObjectOutputStream oos=new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             //读取客户端传过来的request
             RpcRequest rpcRequest = (RpcRequest) ois.readObject();
             //反射调用服务方法获取返回值
@@ -46,10 +46,10 @@ public class WorkThread implements Runnable{
         //得到服务端相应服务实现类
         Object service = serviceProvide.getService(interfaceName);
         //反射调用方法
-        Method method=null;
+        Method method = null;
         try {
-            method= service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamsType());
-            Object invoke=method.invoke(service,rpcRequest.getParams());
+            method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamsType());
+            Object invoke = method.invoke(service,rpcRequest.getParams());
             return RpcResponse.sussess(invoke);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();

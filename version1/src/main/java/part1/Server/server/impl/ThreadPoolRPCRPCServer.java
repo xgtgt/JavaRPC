@@ -24,9 +24,9 @@ public class ThreadPoolRPCRPCServer implements RpcServer {
     private ServiceProvider serviceProvider;
 
     public ThreadPoolRPCRPCServer(ServiceProvider serviceProvider){
-        threadPool=new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
+        threadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(),
                 1000,60, TimeUnit.SECONDS,new ArrayBlockingQueue<>(100));
-        this.serviceProvider= serviceProvider;
+        this.serviceProvider = serviceProvider;
     }
     public ThreadPoolRPCRPCServer(ServiceProvider serviceProvider, int corePoolSize,
                                   int maximumPoolSize,
