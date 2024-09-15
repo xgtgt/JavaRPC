@@ -19,12 +19,12 @@ public class SimpleSocketRpcClient implements RpcClient {
 
     private String host;
     private int port;
-    public SimpleSocketRpcClient(String host,int port){
+    public SimpleSocketRpcClient(String host, int port){
         this.host=host;
         this.port=port;
     }
     @Override
-    public part1.common.Message.RpcResponse sendRequest(RpcRequest request) {
+    public RpcResponse sendRequest(RpcRequest request) {
         try {
             Socket socket=new Socket(host, port);
             ObjectOutputStream oos=new ObjectOutputStream(socket.getOutputStream());
@@ -33,7 +33,7 @@ public class SimpleSocketRpcClient implements RpcClient {
             oos.writeObject(request);
             oos.flush();
 
-            part1.common.Message.RpcResponse response=(RpcResponse) ois.readObject();
+            RpcResponse response=(RpcResponse) ois.readObject();
             return response;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

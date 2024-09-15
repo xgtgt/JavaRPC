@@ -2,7 +2,7 @@ package part1.Server;
 
 import part1.Server.provider.ServiceProvider;
 import part1.Server.server.RpcServer;
-import part1.Server.server.impl.SimpleRPCRPCServer;
+import part1.Server.server.impl.NettyRPCRPCServer;
 import part1.common.service.Impl.UserServiceImpl;
 import part1.common.service.UserService;
 
@@ -13,13 +13,14 @@ import part1.common.service.UserService;
  * @Version: 1.0
  */
 public class TestServer {
-    public static void main(String[] args) {
-        UserService userService = new UserServiceImpl();
+    public static void main(String[] args) throws InterruptedException {
+        UserService userService=new UserServiceImpl();
 
-        ServiceProvider serviceProvider = new ServiceProvider();
-        serviceProvider.provideServiceInterface(userService);
+        ServiceProvider serviceProvider=new ServiceProvider("127.0.0.1",9999);
 
-        RpcServer rpcServer = new SimpleRPCRPCServer(serviceProvider);
+        serviceProvider.provideServiceInterface(userService,true);
+
+        RpcServer rpcServer=new NettyRPCRPCServer(serviceProvider);
         rpcServer.start(9999);
     }
 }

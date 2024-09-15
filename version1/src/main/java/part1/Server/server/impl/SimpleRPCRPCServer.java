@@ -25,9 +25,7 @@ public class SimpleRPCRPCServer implements RpcServer {
             ServerSocket serverSocket=new ServerSocket(port);
             System.out.println("服务器启动了");
             while (true) {
-                //如果没有连接，会堵塞在这里
                 Socket socket = serverSocket.accept();
-                //有连接，创建一个新的线程执行处理
                 new Thread(new WorkThread(socket,serviceProvide)).start();
             }
         } catch (IOException e) {
@@ -37,5 +35,6 @@ public class SimpleRPCRPCServer implements RpcServer {
 
     @Override
     public void stop() {
+
     }
 }

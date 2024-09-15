@@ -1,7 +1,9 @@
 package part1.common.Message;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * @Description: 请求信息格式
  * @Version: 1.0
  */
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Builder
 public class RpcRequest implements Serializable {
