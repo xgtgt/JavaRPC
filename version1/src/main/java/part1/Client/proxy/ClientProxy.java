@@ -1,6 +1,8 @@
 package part1.Client.proxy;
 
 import lombok.AllArgsConstructor;
+import part1.Client.circuitBreaker.CircuitBreaker;
+import part1.Client.circuitBreaker.CircuitBreakerProvider;
 import part1.Client.retry.guavaRetry;
 import part1.Client.rpcClient.RpcClient;
 import part1.Client.rpcClient.impl.NettyRpcClient;
@@ -22,7 +24,7 @@ import java.lang.reflect.Proxy;
 @AllArgsConstructor
 public class ClientProxy implements InvocationHandler {
     //传入参数service接口的class对象，反射封装成一个request
-
+    private CircuitBreakerProvider circuitBreakerProvider;
     private RpcClient rpcClient;
     private ServiceCenter serviceCenter;
     public ClientProxy() throws InterruptedException {
@@ -38,6 +40,13 @@ public class ClientProxy implements InvocationHandler {
                 .interfaceName(method.getDeclaringClass().getName())
                 .methodName(method.getName())
                 .params(args).paramsType(method.getParameterTypes()).build();
+        //获取熔断器
+        CircuitBreaker circuitBreaker=circuitBreakerProvider.getCircuitBreaker(method.getName());
+        //判断熔断器是否允许请求经过
+        if (!circuitBreaker.allowRequest()){
+            //这里可以针对熔断做特殊处理，返回特殊值
+            return null;
+        }
         //数据传输
         RpcResponse response;
         //后续添加逻辑：为保持幂等性，只对白名单上的服务进行重试
@@ -47,6 +56,13 @@ public class ClientProxy implements InvocationHandler {
         }else {
             //只调用一次
             response= rpcClient.sendRequest(request);
+        }
+        //记录response的状态，上报给熔断器
+        if (response.getCode() ==200){
+            circuitBreaker.recordSuccess();
+        }
+        if (response.getCode()==500){
+            circuitBreaker.recordFailure();
         }
         return response.getData();
     }
